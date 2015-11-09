@@ -38,7 +38,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private GPSTracker mGps;
@@ -156,7 +156,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         };*/
         mAdapter = new MyInfoWindowAdapter();
         mMap.setInfoWindowAdapter(mAdapter);
-
+        mMap.setOnMarkerClickListener(this);
 
         // Add a marker in current location and move the camera
         LatLng currentLocation = new LatLng(mLatitude, mLongitude);
@@ -168,6 +168,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String url2 = "https://api.instagram.com/v1/media/search?lat="+mLatitude+"&lng="+mLongitude+"&access_token="+mInsApp.getTOken();
         Log.e("IMAGEURL", "link " + url2);
         new BaseAsyncTask(this,null,null,true,getLocationCallback).execute(url2);
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        mAdapter.notifyAll();
+        return false;
     }
 
     private class InfoWindowRefresher implements Callback {
