@@ -3,6 +3,7 @@ package com.example.lytuananh.demowonoloapp.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,10 +14,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.lytuananh.demowonoloapp.MyApplication;
 import com.example.lytuananh.demowonoloapp.R;
 import com.example.lytuananh.demowonoloapp.instagram.InstagramApp;
-import com.squareup.picasso.Picasso;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.HashMap;
 
@@ -29,12 +32,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private LinearLayout mLnProfile;
     private ImageView mImgProfile;
     private TextView mUserName;
+    private ImageLoader imageLoader;
+    private DisplayImageOptions options;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //init universal loader
+        ((MyApplication)getApplication()).initImageLoader();
+        imageLoader = ImageLoader.getInstance();
+        options = new DisplayImageOptions.Builder()
+                .showStubImage(R.mipmap.ic_launcher)		//	Display Stub Image
+                .showImageForEmptyUri(R.mipmap.ic_launcher)	//	If Empty image found
+                .cacheInMemory()
+                .cacheOnDisc().bitmapConfig(Bitmap.Config.RGB_565).build();
+
         mApp = new InstagramApp(this, getResources().getString(R.string.client_id),
                 getResources().getString(R.string.client_secret), getResources().getString(R.string.callback_url));
         mApp.setListener(new InstagramApp.OAuthAuthenticationListener() {
@@ -66,13 +80,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             mLnProfile.setVisibility(View.VISIBLE);
             mUserName.setText(mApp.getUserName());
             if(image!=null && image.trim().length()>0) {
-                Picasso.with(getApplicationContext())
-                        .load(mApp.getUserInfo().get("profile_picture"))
-                        .fit()
-                        .centerCrop()
-                        .placeholder(R.mipmap.ic_launcher)
-                        .error(R.mipmap.ic_launcher)
-                        .into(mImgProfile);
+                imageLoader.displayImage(image,mImgProfile);
             }
 
         }
@@ -101,13 +109,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String image = mApp.getUserInfo().get("profile_picture");
                 mUserName.setText(mApp.getUserName());
                 if(image!=null && image.trim().length()>0) {
-                    Picasso.with(getApplicationContext())
-                            .load(mApp.getUserInfo().get("profile_picture"))
-                            .fit()
-                            .centerCrop()
-                            .placeholder(R.mipmap.ic_launcher)
-                            .error(R.mipmap.ic_launcher)
-                            .into(mImgProfile);
+                    imageLoader.displayImage(image,mImgProfile);
                 }
 
             } else if (msg.what == InstagramApp.WHAT_FINALIZE) {

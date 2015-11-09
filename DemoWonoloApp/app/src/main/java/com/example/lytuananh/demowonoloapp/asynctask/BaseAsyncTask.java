@@ -17,16 +17,12 @@ import org.json.JSONObject;
 public class BaseAsyncTask extends AsyncTask<String, Void, String> {
 
     private Context mContext;
-    private String[] keys;
-    private String[] values;
     private RequestCallback mListener;
     private Boolean isShowLoading = true;
     private ProgressDialog pda;
 
-    public BaseAsyncTask(Context context, String[] keys, String[] values,Boolean isLoading,RequestCallback listener) {
+    public BaseAsyncTask(Context context,Boolean isLoading,RequestCallback listener) {
         mContext = context;
-        this.keys = keys;
-        this.values = values;
         mListener = listener;
         this.isShowLoading = isLoading;
     }

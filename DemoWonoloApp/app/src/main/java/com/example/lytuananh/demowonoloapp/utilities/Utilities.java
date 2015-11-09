@@ -12,7 +12,9 @@ import java.net.URLConnection;
  */
 public class Utilities {
     //Map Constant
-    public static int DEAFAULT_MAP_ZOOM = 14;
+    public static int DEAFAULT_MAP_ZOOM = 15;
+    public static long DELAY_TIME_MOVING_APP = 1000;
+    public static int GET_IMAGE = 100;
 
     //Instagram
     public static String INS_META = "meta";
@@ -22,6 +24,8 @@ public class Utilities {
     public static String INS_IMAGE_TYPE = "image";
     public static String INS_IMAGE_LOW = "low_resolution";
     public static String INS_IMAGE_STANDARD = "standard_resolution";
+    //SERVER API
+    public static String BASE_URL = "https://api.instagram.com/v1/media/search?";
 
     public static String streamToString(InputStream is) throws IOException {
         String str = "";
