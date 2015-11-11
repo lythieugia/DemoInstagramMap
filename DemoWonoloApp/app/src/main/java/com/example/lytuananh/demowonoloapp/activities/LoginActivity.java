@@ -123,8 +123,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.activity_login_btn_login){
-            connectOrDisconnectUser();
-        }else if(v.getId() == R.id.btn_location){
+            //connectOrDisconnectUser();
             Intent i =  new Intent(LoginActivity.this,MapsActivity.class);
             startActivity(i);
         }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,6 +52,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<LocationData> mLocationDataList;
     private Boolean isMovingCam = false;
     private LatLng mCurrentViewLatLng;
+    private String mClientId;
 
     //Instagram
     private InstagramApp mInsApp;
@@ -63,6 +65,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        //get client id
+        mClientId = getResources().getString(R.string.client_id);
 
         //get Instance InstagramApp
         mInsApp = ((MyApplication)getApplication()).getInstgramMap();
@@ -111,8 +116,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
 
         //get Instagram Data
-        String url2 = Utilities.BASE_URL+"lat="+mLatitude+"&lng="+mLongitude+"&access_token="+mInsApp.getTOken();
-        new BaseAsyncTask(this,false,getLocationCallback).execute(url2);
+        getImage(currentLocation);
+    }
+
+    private void getImage(LatLng pLocation) {
+        String url = Utilities.BASE_URL_2 + Utilities.DEFAULT_DISTANCE + "&&client_id=" + mClientId + "&lat=" + pLocation.latitude + "&lng=" + pLocation.longitude;
+        Log.e("URLLO","URL"+url);
+        new BaseAsyncTask(getApplicationContext(), false, getLocationCallback).execute(url);
     }
 
     /* Callback object */
@@ -190,8 +200,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         public void handleMessage(Message m) {
             if(m.what==Utilities.GET_IMAGE) {
-                String url2 = Utilities.BASE_URL + "lat=" + mCurrentViewLatLng.latitude + "&lng=" + mCurrentViewLatLng.longitude + "&access_token=" + mInsApp.getTOken();
-                new BaseAsyncTask(getApplicationContext(), false, getLocationCallback).execute(url2);
+                getImage(mCurrentViewLatLng);
             }
         }
     };

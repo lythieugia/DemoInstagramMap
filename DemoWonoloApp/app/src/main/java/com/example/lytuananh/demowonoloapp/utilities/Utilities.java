@@ -15,6 +15,7 @@ public class Utilities {
     public static int DEAFAULT_MAP_ZOOM = 15;
     public static long DELAY_TIME_MOVING_APP = 1000;
     public static int GET_IMAGE = 100;
+    public static int DEFAULT_DISTANCE = 1000;
 
     //Instagram
     public static String INS_META = "meta";
@@ -26,6 +27,7 @@ public class Utilities {
     public static String INS_IMAGE_STANDARD = "standard_resolution";
     //SERVER API
     public static String BASE_URL = "https://api.instagram.com/v1/media/search?";
+    public static String BASE_URL_2 = "https://api.instagram.com/v1/media/search?distance=";
 
     public static String streamToString(InputStream is) throws IOException {
         String str = "";
